@@ -181,6 +181,13 @@ if (calendar) {
   }
 }
 
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 const hashIndex = slides.findIndex(slide => `#${slide.id}` === window.location.hash);
-if (hashIndex >= 0) window.setTimeout(() => { window.scrollTo(0, 0); goTo(hashIndex, 'instant'); }, 0);
-else selectSlide(slides[0]);
+window.setTimeout(() => {
+  window.scrollTo(0, 0);
+  if (hashIndex >= 0) goTo(hashIndex, 'instant');
+  else {
+    deck.scrollTop = 0;
+    selectSlide(slides[0]);
+  }
+}, 0);
