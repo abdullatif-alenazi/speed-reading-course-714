@@ -1,4 +1,5 @@
 html,body{width:100%;height:100%;overflow:hidden}
+:root{--navy:#2563a5;--navy-2:#2f78bd;--blue:#3b82c4;--teal:#16a39b;--gold:#ffbd59;--ink:#183b5a;--muted:#5f7789;--line:#d7e7f0;--bg:#f2f9fc}
 .page{position:fixed;inset:var(--header-h) 0 0;height:auto;margin:0}
 .page main{height:100%;margin:0}
 .topbar{justify-content:flex-start;gap:12px}
@@ -19,7 +20,34 @@ html,body{width:100%;height:100%;overflow:hidden}
 .hawi-steps li{position:relative;min-height:116px;padding:18px 50px 16px 16px;background:#fff;border:1px solid var(--line);border-radius:8px;counter-increment:hawi}
 .hawi-steps li::before{content:counter(hawi);position:absolute;right:16px;top:18px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e5f3f1;color:var(--teal);font:700 12px Arial}
 .hawi-steps b,.hawi-steps span,.hawi-steps a{display:block}.hawi-steps b{font-size:14px}.hawi-steps span,.hawi-steps a{margin-top:5px;color:var(--muted);font-size:12px;line-height:1.65}.hawi-steps a{color:var(--teal);font-weight:700}.hawi-join{margin-top:2px}
+.hawi-title{font-size:17px;color:var(--navy);margin-top:18px}
+.hawi-join{display:flex;width:max-content;margin:4px auto 0;background:linear-gradient(135deg,#18b4a7,#32c4b7);border-radius:999px;box-shadow:0 8px 20px rgba(22,163,155,.22)}
+.button,.slide-next,.wide-media,.audio-card,.book-rules,.timeline,.plan-steps>div,.calendar,.trainer-note,.hawi-steps li{border-radius:16px}
+.menu-toggle{border-radius:14px;background:linear-gradient(135deg,#2f78bd,#36a9ba);box-shadow:0 6px 14px rgba(37,99,165,.2)}
+.slide.hero-slide{background:radial-gradient(circle at 20% 15%,#6cc7cf 0%,transparent 31%),linear-gradient(135deg,#2f78bd,#2563a5)}
+.slide{background:linear-gradient(130deg,#fbfeff 0%,#ecf8fa 100%)}
+.slide:nth-of-type(odd){background:linear-gradient(130deg,#f8fcff 0%,#e3f4f4 100%)}
+#prepare .prepare-details{grid-template-columns:minmax(0,520px);margin-top:16px}
+#books{padding-top:20px}
+#books .books-guide video{height:140px}
+#books .books-guide figcaption{display:none}
+#books .book-rules{display:grid;grid-template-columns:180px 1fr;margin-top:10px}
+#books .page-rule{padding:14px}
+#books .page-rule strong{font-size:34px}
+#books .page-rule>div{font-size:10px;margin-top:7px;padding-top:7px}
+#books .rule-list{display:grid;grid-template-columns:repeat(3,1fr);padding:0 14px;gap:9px;align-items:center}
+#books .rule-list article{border:0;padding:8px 0}
+#books .rule-list h3{font-size:12px;line-height:1.4}
+#books .rule-list p{font-size:10px;line-height:1.5;margin-top:3px}
+#books .audio-card{margin-top:7px;padding:9px}
+#books .audio-card.full-width{grid-template-columns:auto 1fr minmax(210px,33%) auto}
+#books .audio-card.full-width p,#books .audio-card.full-width .small-link{display:none}
+@keyframes content-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+.slide .slide-content>*{opacity:0}
+.slide.is-active .slide-content>*{animation:content-in .48s cubic-bezier(.22,.7,.25,1) forwards}
+.slide.is-active .slide-content>*:nth-child(2){animation-delay:.08s}.slide.is-active .slide-content>*:nth-child(3){animation-delay:.16s}.slide.is-active .slide-content>*:nth-child(4){animation-delay:.24s}.slide.is-active .slide-content>*:nth-child(5){animation-delay:.32s}
+@media(prefers-reduced-motion:reduce){.slide .slide-content>*{opacity:1}.slide.is-active .slide-content>*{animation:none}}
 .sidebar{right:0;left:auto;transform:translateX(105%)}
 .sidebar.open{transform:translateX(0)}
 @media(max-width:760px){.sidebar{right:0;left:auto}}
-@media(max-width:760px){.criteria-image img{height:300px}.hawi-steps{grid-template-columns:1fr;gap:8px;margin:14px 0}.hawi-steps li{min-height:0;padding:13px 44px 13px 12px}.hawi-steps li::before{right:12px;top:13px}.hawi-steps b{font-size:12px}.hawi-steps span,.hawi-steps a{font-size:10px}.hawi-join{font-size:12px;padding:10px 14px}}
+@media(max-width:760px){.criteria-image img{height:300px}.hawi-steps{grid-template-columns:1fr;gap:8px;margin:14px 0}.hawi-steps li{min-height:0;padding:13px 44px 13px 12px}.hawi-steps li::before{right:12px;top:13px}.hawi-steps b{font-size:12px}.hawi-steps span,.hawi-steps a{font-size:10px}.hawi-join{font-size:12px;padding:10px 14px}#books{padding-top:14px}#books .books-guide video{height:125px}#books .book-rules{grid-template-columns:128px 1fr;margin-top:7px}#books .page-rule{padding:9px}#books .page-rule strong{font-size:25px}#books .page-rule>div{font-size:8px;line-height:1.4}#books .rule-list{grid-template-columns:1fr;padding:4px 9px;gap:0}#books .rule-list article{padding:3px 0}#books .rule-list h3{font-size:10px}#books .rule-list p{display:none}#books .audio-card{margin-top:7px;padding:9px}#books .audio-card.full-width{display:grid;grid-template-columns:auto 1fr}#books .audio-card.full-width audio{grid-column:1/-1}#books .audio-card.full-width .small-link{display:none}.hawi-title{font-size:15px;margin-top:13px}}

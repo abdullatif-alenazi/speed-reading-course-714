@@ -15,6 +15,7 @@ const selectSlide = slide => {
     active ? link.setAttribute('aria-current', 'location') : link.removeAttribute('aria-current');
   });
   if (counter) counter.textContent = `الشريحة ${index + 1} من ${slides.length}`;
+  slides.forEach(item => item.classList.toggle('is-active', item === slide));
 };
 
 const observer = new IntersectionObserver(entries => {
@@ -68,13 +69,27 @@ menuToggle.addEventListener('click', () => menu.classList.contains('open') ? clo
 menuClose.addEventListener('click', closeMenu);
 menuBackdrop.addEventListener('click', closeMenu);
 
+const moveSlide = direction => {
+  if (locked) return;
+  const next = slideIndex + direction;
+  if (next < 0 || next >= slides.length) return;
+  locked = true;
+  goTo(next);
+  window.setTimeout(() => { locked = false; }, 420);
+};
+
+const canContinuePast = (slide, direction) => {
+  const maxScroll = slide.scrollHeight - slide.clientHeight;
+  return maxScroll <= 2 || (direction > 0 ? slide.scrollTop >= maxScroll - 2 : slide.scrollTop <= 2);
+};
+
 deck.addEventListener('wheel', event => {
   if (event.target.closest('video,audio,details')) return;
   const scrollableSlide = event.target.closest('#books,#resources');
   if (scrollableSlide) {
     const maxScroll = scrollableSlide.scrollHeight - scrollableSlide.clientHeight;
-    const canScrollDown = event.deltaY > 0 && scrollableSlide.scrollTop < maxScroll;
-    const canScrollUp = event.deltaY < 0 && scrollableSlide.scrollTop > 0;
+    const canScrollDown = event.deltaY > 0 && scrollableSlide.scrollTop < maxScroll - 2;
+    const canScrollUp = event.deltaY < 0 && scrollableSlide.scrollTop > 2;
     if (canScrollDown || canScrollUp) {
       event.preventDefault();
       scrollableSlide.scrollTop += event.deltaY;
@@ -82,32 +97,28 @@ deck.addEventListener('wheel', event => {
     }
   }
   event.preventDefault();
-  if (locked || Math.abs(event.deltaY) < 8) return;
+  if (Math.abs(event.deltaY) < 8) return;
   const direction = event.deltaY > 0 ? 1 : -1;
-  if ((direction > 0 && slideIndex === slides.length - 1) || (direction < 0 && slideIndex === 0)) return;
-  locked = true;
-  goTo(slideIndex + direction);
-  window.setTimeout(() => { locked = false; }, 650);
+  moveSlide(direction);
 }, { passive: false });
 
 let touchStartY = null;
 deck.addEventListener('touchstart', event => { touchStartY = event.changedTouches[0].clientY; }, { passive: true });
 deck.addEventListener('touchend', event => {
-  if (touchStartY === null || event.target.closest('video,audio,details,#books,#resources')) return;
+  if (touchStartY === null || event.target.closest('video,audio,details')) return;
   const delta = touchStartY - event.changedTouches[0].clientY;
   touchStartY = null;
-  if (Math.abs(delta) < 42 || locked) return;
+  if (Math.abs(delta) < 42) return;
   const direction = delta > 0 ? 1 : -1;
-  if ((direction > 0 && slideIndex === slides.length - 1) || (direction < 0 && slideIndex === 0)) return;
-  locked = true;
-  goTo(slideIndex + direction);
-  window.setTimeout(() => { locked = false; }, 650);
+  const scrollableSlide = event.target.closest('#books,#resources');
+  if (scrollableSlide && !canContinuePast(scrollableSlide, direction)) return;
+  moveSlide(direction);
 }, { passive: true });
 
 window.addEventListener('keydown', event => {
   if (!['ArrowDown', 'PageDown', 'ArrowUp', 'PageUp'].includes(event.key)) return;
   event.preventDefault();
-  goTo(slideIndex + (['ArrowDown', 'PageDown'].includes(event.key) ? 1 : -1));
+  moveSlide(['ArrowDown', 'PageDown'].includes(event.key) ? 1 : -1);
 });
 
 document.querySelectorAll('audio,video').forEach(media => media.addEventListener('play', () => {
