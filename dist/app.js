@@ -5,6 +5,7 @@ const counter = document.querySelector('#slide-counter');
 const deck = document.querySelector('main');
 let slideIndex = 0;
 let locked = false;
+let lockTimer = null;
 let scrollFrame = null;
 let activeSlide = null;
 let isProgrammaticNavigation = false;
@@ -128,13 +129,21 @@ menuToggle.addEventListener('click', () => menu.classList.contains('open') ? clo
 menuClose.addEventListener('click', closeMenu);
 menuBackdrop.addEventListener('click', closeMenu);
 
+const holdSlideLock = (cooldown = 480) => {
+  locked = true;
+  if (lockTimer) window.clearTimeout(lockTimer);
+  lockTimer = window.setTimeout(() => {
+    locked = false;
+    lockTimer = null;
+  }, cooldown);
+};
+
 const moveSlide = (direction, cooldown = 480) => {
   if (locked) return;
   const next = slideIndex + direction;
   if (next < 0 || next >= slides.length) return;
-  locked = true;
+  holdSlideLock(cooldown);
   goTo(next);
-  window.setTimeout(() => { locked = false; }, cooldown);
 };
 
 const canContinuePast = (slide, direction) => {
@@ -156,9 +165,14 @@ deck.addEventListener('wheel', event => {
     }
   }
   event.preventDefault();
+  if (locked) {
+    // تمديد القفل ما دامت عجلة الماوس ترسل دفعة الحركة نفسها.
+    holdSlideLock(480);
+    return;
+  }
   if (Math.abs(event.deltaY) < 8) return;
   const direction = event.deltaY > 0 ? 1 : -1;
-  moveSlide(direction, 800);
+  moveSlide(direction, 480);
 }, { passive: false });
 
 let touchStartY = null;
