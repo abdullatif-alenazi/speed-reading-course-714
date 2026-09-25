@@ -5,6 +5,27 @@ const deck = document.querySelector('main');
 let slideIndex = 0;
 let locked = false;
 let scrollFrame = null;
+let activeSlide = null;
+
+const revealSlide = slide => {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const targets = [...slide.querySelectorAll('.slide-content > *')];
+  targets.forEach((target, index) => {
+    target.getAnimations().forEach(animation => animation.cancel());
+    target.style.opacity = '0';
+    target.style.transform = 'translateY(28px) scale(.985)';
+    target.style.filter = 'blur(9px)';
+    target.animate([
+      { opacity: 0, transform: 'translateY(28px) scale(.985)', filter: 'blur(9px)' },
+      { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
+    ], {
+      duration: 780,
+      delay: index * 115,
+      easing: 'cubic-bezier(.22, 1, .36, 1)',
+      fill: 'forwards',
+    });
+  });
+};
 
 const selectSlide = slide => {
   const index = slides.indexOf(slide);
@@ -17,6 +38,16 @@ const selectSlide = slide => {
   });
   if (counter) counter.textContent = `الشريحة ${index + 1} من ${slides.length}`;
   slides.forEach(item => item.classList.toggle('is-active', item === slide));
+  if (activeSlide !== slide) {
+    if (activeSlide) activeSlide.querySelectorAll('.slide-content > *').forEach(target => {
+      target.getAnimations().forEach(animation => animation.cancel());
+      target.style.removeProperty('opacity');
+      target.style.removeProperty('transform');
+      target.style.removeProperty('filter');
+    });
+    activeSlide = slide;
+    revealSlide(slide);
+  }
 };
 
 const observer = new IntersectionObserver(entries => {
