@@ -7,6 +7,7 @@ let slideIndex = 0;
 let locked = false;
 let scrollFrame = null;
 let activeSlide = null;
+let isProgrammaticNavigation = false;
 
 const revealSlide = (slide, initialDelay = 0) => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -52,6 +53,7 @@ const selectSlide = (slide, revealDelay = 0) => {
 };
 
 const observer = new IntersectionObserver(entries => {
+  if (isProgrammaticNavigation) return;
   entries.filter(entry => entry.isIntersecting)
     .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
     .slice(0, 1)
@@ -60,7 +62,7 @@ const observer = new IntersectionObserver(entries => {
 slides.forEach(slide => observer.observe(slide));
 
 const easeOutQuint = value => 1 - Math.pow(1 - value, 5);
-const smoothScrollTo = (top, duration = 360) => {
+const smoothScrollTo = (top, duration = 360, onComplete = () => {}) => {
   if (scrollFrame) cancelAnimationFrame(scrollFrame);
   const previousBehavior = deck.style.scrollBehavior;
   deck.style.scrollBehavior = 'auto';
@@ -74,6 +76,7 @@ const smoothScrollTo = (top, duration = 360) => {
     else {
       scrollFrame = null;
       deck.style.scrollBehavior = previousBehavior;
+      onComplete();
     }
   };
   scrollFrame = requestAnimationFrame(step);
@@ -83,12 +86,16 @@ const goTo = (index, behavior = 'smooth') => {
   const next = Math.max(0, Math.min(slides.length - 1, index));
   slideIndex = next;
   const top = slides[next].offsetTop - deck.offsetTop;
+  isProgrammaticNavigation = true;
   if (behavior === 'instant') {
     const previous = deck.style.scrollBehavior;
     deck.style.scrollBehavior = 'auto';
     deck.scrollTo({ top, behavior: 'auto' });
-    requestAnimationFrame(() => { deck.style.scrollBehavior = previous; });
-  } else smoothScrollTo(top);
+    requestAnimationFrame(() => {
+      deck.style.scrollBehavior = previous;
+      isProgrammaticNavigation = false;
+    });
+  } else smoothScrollTo(top, 360, () => { isProgrammaticNavigation = false; });
   // تبدأ حركة المحتوى قرب اكتمال الانتقال، كي لا تنتهي قبل ظهور السلايد.
   selectSlide(slides[next], behavior === 'instant' ? 0 : 160);
 };
@@ -121,13 +128,13 @@ menuToggle.addEventListener('click', () => menu.classList.contains('open') ? clo
 menuClose.addEventListener('click', closeMenu);
 menuBackdrop.addEventListener('click', closeMenu);
 
-const moveSlide = direction => {
+const moveSlide = (direction, cooldown = 480) => {
   if (locked) return;
   const next = slideIndex + direction;
   if (next < 0 || next >= slides.length) return;
   locked = true;
   goTo(next);
-  window.setTimeout(() => { locked = false; }, 420);
+  window.setTimeout(() => { locked = false; }, cooldown);
 };
 
 const canContinuePast = (slide, direction) => {
@@ -151,7 +158,7 @@ deck.addEventListener('wheel', event => {
   event.preventDefault();
   if (Math.abs(event.deltaY) < 8) return;
   const direction = event.deltaY > 0 ? 1 : -1;
-  moveSlide(direction);
+  moveSlide(direction, 800);
 }, { passive: false });
 
 let touchStartY = null;
