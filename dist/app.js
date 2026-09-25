@@ -14,7 +14,7 @@ const selectSlide = slide => {
     link.classList.toggle('active', active);
     active ? link.setAttribute('aria-current', 'location') : link.removeAttribute('aria-current');
   });
-  counter.textContent = `الشريحة ${index + 1} من ${slides.length}`;
+  if (counter) counter.textContent = `الشريحة ${index + 1} من ${slides.length}`;
 };
 
 const observer = new IntersectionObserver(entries => {
@@ -28,7 +28,15 @@ slides.forEach(slide => observer.observe(slide));
 const goTo = (index, behavior = 'smooth') => {
   const next = Math.max(0, Math.min(slides.length - 1, index));
   slideIndex = next;
-  deck.scrollTo({ top: slides[next].offsetTop - deck.offsetTop, behavior });
+  const top = slides[next].offsetTop - deck.offsetTop;
+  if (behavior === 'instant') {
+    const previous = deck.style.scrollBehavior;
+    deck.style.scrollBehavior = 'auto';
+    deck.scrollTo({ top, behavior: 'auto' });
+    requestAnimationFrame(() => { deck.style.scrollBehavior = previous; });
+  } else {
+    deck.scrollTo({ top, behavior });
+  }
   selectSlide(slides[next]);
 };
 
@@ -39,7 +47,26 @@ document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener(
   event.preventDefault();
   goTo(index);
   history.replaceState(null, '', `#${id}`);
+  closeMenu();
 }));
+
+const menu = document.querySelector('.sidebar');
+const menuToggle = document.querySelector('.menu-toggle');
+const menuClose = document.querySelector('.menu-close');
+const menuBackdrop = document.querySelector('.menu-backdrop');
+const openMenu = () => {
+  menu.classList.add('open');
+  menuBackdrop.hidden = false;
+  menuToggle.setAttribute('aria-expanded', 'true');
+};
+const closeMenu = () => {
+  menu.classList.remove('open');
+  menuBackdrop.hidden = true;
+  menuToggle.setAttribute('aria-expanded', 'false');
+};
+menuToggle.addEventListener('click', () => menu.classList.contains('open') ? closeMenu() : openMenu());
+menuClose.addEventListener('click', closeMenu);
+menuBackdrop.addEventListener('click', closeMenu);
 
 deck.addEventListener('wheel', event => {
   if (event.target.closest('video,audio,details')) return;
@@ -86,5 +113,5 @@ for (let i = 0; i < 21; i++) {
 }
 
 const hashIndex = slides.findIndex(slide => `#${slide.id}` === window.location.hash);
-if (hashIndex >= 0) window.setTimeout(() => goTo(hashIndex, 'auto'), 0);
+if (hashIndex >= 0) window.setTimeout(() => { window.scrollTo(0, 0); goTo(hashIndex, 'instant'); }, 0);
 else selectSlide(slides[0]);
