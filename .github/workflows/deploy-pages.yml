@@ -1,4 +1,5 @@
 name: Deploy GitHub Pages
+# The Pages source is GitHub Actions; each push deploys the static dist directory.
 
 on:
   push:
