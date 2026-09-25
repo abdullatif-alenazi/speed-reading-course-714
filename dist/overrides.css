@@ -1,0 +1,5 @@
+.slide.hero-slide{
+  background:radial-gradient(circle at 20% 15%,#275574 0%,transparent 30%),#0f2a42;
+  color:#fff;
+  border-bottom-color:#0e2437;
+}
