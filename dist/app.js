@@ -1,4 +1,5 @@
 const slides = [...document.querySelectorAll('.slide')];
+if (window.location.search) history.replaceState(null, '', `${window.location.pathname}${window.location.hash}`);
 const links = [...document.querySelectorAll('.sidebar nav a')];
 const counter = document.querySelector('#slide-counter');
 const deck = document.querySelector('main');
