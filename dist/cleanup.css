@@ -52,8 +52,9 @@ html,body{width:100%;height:100%;overflow:hidden}
 .slide:not(.hero-slide){align-items:flex-start;padding-top:32px}
 .slide:not(.hero-slide) .slide-content{margin:0 auto}
 #books,#resources{padding-top:32px}
-#resources .hawi-steps{margin:13px 0;gap:9px}
-#resources .hawi-steps li{min-height:94px;padding-top:13px;padding-bottom:13px}
+#resources .hawi-steps{margin:10px 0;gap:7px}
+#resources .hawi-steps li{min-height:72px;padding-top:10px;padding-bottom:10px}
+#resources .hawi-steps li::before{top:10px}
 #resources .hawi-title{margin-top:11px}
 #resources .section-intro{margin-top:2px}
 #resources .hawi-join{margin-top:0}
@@ -100,3 +101,4 @@ html,body{width:100%;height:100%;overflow:hidden}
 @media(max-width:760px){.slide:not(.hero-slide){padding-top:32px!important}.slide:not(.hero-slide) .slide-content{margin-top:0!important}#books,#resources{padding-top:32px!important}#books .section-heading,#resources .section-heading{margin-top:0!important}}
 .criteria-summary .criteria-range{display:inline-flex;align-items:center;justify-content:center;gap:2px;flex:0 0 68px;width:68px;white-space:nowrap;direction:rtl;unicode-bidi:isolate}.criteria-summary .criteria-range i{font-style:normal}
 @media(max-width:760px){.criteria-summary .criteria-range{flex-basis:58px;width:58px;font-size:11px}}
+@media(max-width:760px){#resources .hawi-steps{margin:8px 0;gap:5px}#resources .hawi-steps li{min-height:0;padding:8px 36px 8px 10px}#resources .hawi-steps li::before{right:9px;top:8px;width:21px;height:21px;font-size:10px}#resources .hawi-steps b{font-size:11px;line-height:1.35}#resources .hawi-steps span,#resources .hawi-steps a{margin-top:2px;line-height:1.4}}
