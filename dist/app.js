@@ -70,6 +70,17 @@ menuBackdrop.addEventListener('click', closeMenu);
 
 deck.addEventListener('wheel', event => {
   if (event.target.closest('video,audio,details')) return;
+  const booksSlide = event.target.closest('#books');
+  if (booksSlide) {
+    const maxScroll = booksSlide.scrollHeight - booksSlide.clientHeight;
+    const canScrollDown = event.deltaY > 0 && booksSlide.scrollTop < maxScroll;
+    const canScrollUp = event.deltaY < 0 && booksSlide.scrollTop > 0;
+    if (canScrollDown || canScrollUp) {
+      event.preventDefault();
+      booksSlide.scrollTop += event.deltaY;
+      return;
+    }
+  }
   event.preventDefault();
   if (locked || Math.abs(event.deltaY) < 8) return;
   const direction = event.deltaY > 0 ? 1 : -1;
@@ -82,7 +93,7 @@ deck.addEventListener('wheel', event => {
 let touchStartY = null;
 deck.addEventListener('touchstart', event => { touchStartY = event.changedTouches[0].clientY; }, { passive: true });
 deck.addEventListener('touchend', event => {
-  if (touchStartY === null || event.target.closest('video,audio,details')) return;
+  if (touchStartY === null || event.target.closest('video,audio,details,#books')) return;
   const delta = touchStartY - event.changedTouches[0].clientY;
   touchStartY = null;
   if (Math.abs(delta) < 42 || locked) return;
