@@ -4,6 +4,7 @@ const counter = document.querySelector('#slide-counter');
 const deck = document.querySelector('main');
 let slideIndex = 0;
 let locked = false;
+let scrollFrame = null;
 
 const selectSlide = slide => {
   const index = slides.indexOf(slide);
@@ -26,6 +27,21 @@ const observer = new IntersectionObserver(entries => {
 }, { root: deck, threshold: [.45, .65] });
 slides.forEach(slide => observer.observe(slide));
 
+const easeOutQuint = value => 1 - Math.pow(1 - value, 5);
+const smoothScrollTo = (top, duration = 720) => {
+  if (scrollFrame) cancelAnimationFrame(scrollFrame);
+  const start = deck.scrollTop;
+  const distance = top - start;
+  const startedAt = performance.now();
+  const step = now => {
+    const progress = Math.min(1, (now - startedAt) / duration);
+    deck.scrollTop = start + distance * easeOutQuint(progress);
+    if (progress < 1) scrollFrame = requestAnimationFrame(step);
+    else scrollFrame = null;
+  };
+  scrollFrame = requestAnimationFrame(step);
+};
+
 const goTo = (index, behavior = 'smooth') => {
   const next = Math.max(0, Math.min(slides.length - 1, index));
   slideIndex = next;
@@ -35,9 +51,7 @@ const goTo = (index, behavior = 'smooth') => {
     deck.style.scrollBehavior = 'auto';
     deck.scrollTo({ top, behavior: 'auto' });
     requestAnimationFrame(() => { deck.style.scrollBehavior = previous; });
-  } else {
-    deck.scrollTo({ top, behavior });
-  }
+  } else smoothScrollTo(top);
   selectSlide(slides[next]);
 };
 

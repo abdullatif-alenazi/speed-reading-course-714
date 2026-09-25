@@ -42,10 +42,10 @@ html,body{width:100%;height:100%;overflow:hidden}
 #books .audio-card{margin-top:7px;padding:9px}
 #books .audio-card.full-width{grid-template-columns:auto 1fr minmax(210px,33%) auto}
 #books .audio-card.full-width p,#books .audio-card.full-width .small-link{display:none}
-@keyframes content-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.slide .slide-content>*{opacity:0}
-.slide.is-active .slide-content>*{animation:content-in .48s cubic-bezier(.22,.7,.25,1) forwards}
-.slide.is-active .slide-content>*:nth-child(2){animation-delay:.08s}.slide.is-active .slide-content>*:nth-child(3){animation-delay:.16s}.slide.is-active .slide-content>*:nth-child(4){animation-delay:.24s}.slide.is-active .slide-content>*:nth-child(5){animation-delay:.32s}
+@keyframes content-in{0%{opacity:0;transform:translateY(28px) scale(.985);filter:blur(8px)}60%{opacity:1;filter:blur(0)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.slide .slide-content>*{opacity:0;will-change:opacity,transform,filter}
+.slide.is-active .slide-content>*{animation:content-in .82s cubic-bezier(.16,1,.3,1) both}
+.slide.is-active .slide-content>*:nth-child(2){animation-delay:.14s}.slide.is-active .slide-content>*:nth-child(3){animation-delay:.28s}.slide.is-active .slide-content>*:nth-child(4){animation-delay:.42s}.slide.is-active .slide-content>*:nth-child(5){animation-delay:.56s}
 @media(prefers-reduced-motion:reduce){.slide .slide-content>*{opacity:1}.slide.is-active .slide-content>*{animation:none}}
 .sidebar{right:0;left:auto;transform:translateX(105%)}
 .sidebar.open{transform:translateX(0)}
