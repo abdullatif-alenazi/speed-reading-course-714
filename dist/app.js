@@ -7,7 +7,7 @@ let locked = false;
 let scrollFrame = null;
 let activeSlide = null;
 
-const revealSlide = slide => {
+const revealSlide = (slide, initialDelay = 0) => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const targets = [...slide.querySelectorAll('.slide-content > *')];
   targets.forEach((target, index) => {
@@ -20,14 +20,14 @@ const revealSlide = slide => {
       { opacity: 1, transform: 'translateY(0) scale(1)', filter: 'blur(0)' },
     ], {
       duration: 780,
-      delay: index * 115,
+      delay: initialDelay + index * 115,
       easing: 'cubic-bezier(.22, 1, .36, 1)',
       fill: 'forwards',
     });
   });
 };
 
-const selectSlide = slide => {
+const selectSlide = (slide, revealDelay = 0) => {
   const index = slides.indexOf(slide);
   if (index < 0) return;
   slideIndex = index;
@@ -46,7 +46,7 @@ const selectSlide = slide => {
       target.style.removeProperty('filter');
     });
     activeSlide = slide;
-    revealSlide(slide);
+    revealSlide(slide, revealDelay);
   }
 };
 
@@ -59,8 +59,10 @@ const observer = new IntersectionObserver(entries => {
 slides.forEach(slide => observer.observe(slide));
 
 const easeOutQuint = value => 1 - Math.pow(1 - value, 5);
-const smoothScrollTo = (top, duration = 720) => {
+const smoothScrollTo = (top, duration = 360) => {
   if (scrollFrame) cancelAnimationFrame(scrollFrame);
+  const previousBehavior = deck.style.scrollBehavior;
+  deck.style.scrollBehavior = 'auto';
   const start = deck.scrollTop;
   const distance = top - start;
   const startedAt = performance.now();
@@ -68,7 +70,10 @@ const smoothScrollTo = (top, duration = 720) => {
     const progress = Math.min(1, (now - startedAt) / duration);
     deck.scrollTop = start + distance * easeOutQuint(progress);
     if (progress < 1) scrollFrame = requestAnimationFrame(step);
-    else scrollFrame = null;
+    else {
+      scrollFrame = null;
+      deck.style.scrollBehavior = previousBehavior;
+    }
   };
   scrollFrame = requestAnimationFrame(step);
 };
@@ -83,7 +88,8 @@ const goTo = (index, behavior = 'smooth') => {
     deck.scrollTo({ top, behavior: 'auto' });
     requestAnimationFrame(() => { deck.style.scrollBehavior = previous; });
   } else smoothScrollTo(top);
-  selectSlide(slides[next]);
+  // تبدأ حركة المحتوى قرب اكتمال الانتقال، كي لا تنتهي قبل ظهور السلايد.
+  selectSlide(slides[next], behavior === 'instant' ? 0 : 160);
 };
 
 document.querySelectorAll('a[href^="#"]').forEach(link => link.addEventListener('click', event => {
