@@ -3,3 +3,56 @@
   color:#fff;
   border-bottom-color:#0e2437;
 }
+
+/* Each wheel tick or swipe lands on one complete slide. */
+html{scroll-snap-type:none;overflow:hidden}
+body{height:100svh;overflow:hidden}
+.page{height:100svh}
+main{
+  height:calc(100svh - 56px);
+  margin-top:56px;
+  padding-top:0;
+  overflow-y:auto;
+  overscroll-behavior-y:contain;
+  scroll-behavior:smooth;
+  scroll-snap-type:y mandatory;
+  scrollbar-width:none;
+}
+main::-webkit-scrollbar{display:none}
+.slide{
+  height:100%;
+  min-height:100%;
+  scroll-snap-align:start;
+  scroll-snap-stop:always;
+}
+
+@media(max-width:760px){
+  .sidebar{position:fixed;top:0;right:0;left:0;height:84px;z-index:8}
+  .page{height:calc(100svh - 84px);margin:84px 0 0}
+  .topbar{position:absolute;top:0;right:0;left:0;height:34px;padding:8px 5%}
+  main{height:calc(100% - 34px);margin-top:34px}
+  .slide{height:100%;min-height:100%;scroll-margin-top:0}
+  .section-heading{margin-bottom:16px}
+  .prepare-grid{grid-template-columns:1fr 122px;gap:12px;align-items:stretch}
+  .prepare-grid .checklist{padding:3px 14px}
+  .prepare-grid .checklist article{gap:9px;padding:8px 0}
+  .prepare-grid .checklist h3{font-size:13px;line-height:1.55}
+  .prepare-grid .checklist p{font-size:10px;line-height:1.55}
+  .prepare-grid .item-no{flex-basis:24px;height:24px;font-size:11px;margin-top:2px}
+  .notebook{display:flex;flex-direction:column}
+  .notebook video{width:100%;height:calc(100% - 76px);min-height:0;object-fit:cover}
+  .notebook figcaption{padding:8px 9px}
+  .notebook .media-label{font-size:9px}
+  .notebook h3{font-size:11px;line-height:1.55}
+  .media-grid{grid-template-columns:1fr 1fr;gap:10px}
+  .books-video{grid-column:span 2;display:flex;height:178px}
+  .books-video video{width:44%;height:100%}
+  .books-video figcaption{display:flex;flex-direction:column;justify-content:center;padding:12px}
+  .audio-card,.guide-preview{min-height:142px;padding:14px}
+  .audio-card h3,.guide-preview h3{font-size:12px}
+  .audio-card p{font-size:10px;margin:4px 0 6px}
+  .audio-card audio{height:32px}
+  .guide-preview>div{padding:10px}
+  .guide-preview img{width:42%}
+  .slide-next{bottom:7px}
+}
