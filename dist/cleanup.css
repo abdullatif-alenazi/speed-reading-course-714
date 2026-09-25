@@ -13,6 +13,13 @@ html,body{width:100%;height:100%;overflow:hidden}
 #books .books-guide video{height:250px}
 #books .book-rules{margin-top:14px}
 #books .audio-card{margin-top:14px}
+.criteria-image img{height:440px;object-fit:contain;background:#fff}
+#resources{align-items:flex-start;overflow-y:auto;padding-top:42px}
+.hawi-steps{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:22px 0;padding:0;list-style:none;counter-reset:hawi}
+.hawi-steps li{position:relative;min-height:116px;padding:18px 50px 16px 16px;background:#fff;border:1px solid var(--line);border-radius:8px;counter-increment:hawi}
+.hawi-steps li::before{content:counter(hawi);position:absolute;right:16px;top:18px;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#e5f3f1;color:var(--teal);font:700 12px Arial}
+.hawi-steps b,.hawi-steps span,.hawi-steps a{display:block}.hawi-steps b{font-size:14px}.hawi-steps span,.hawi-steps a{margin-top:5px;color:var(--muted);font-size:12px;line-height:1.65}.hawi-steps a{color:var(--teal);font-weight:700}.hawi-join{margin-top:2px}
 .sidebar{right:0;left:auto;transform:translateX(105%)}
 .sidebar.open{transform:translateX(0)}
 @media(max-width:760px){.sidebar{right:0;left:auto}}
+@media(max-width:760px){.criteria-image img{height:300px}.hawi-steps{grid-template-columns:1fr;gap:8px;margin:14px 0}.hawi-steps li{min-height:0;padding:13px 44px 13px 12px}.hawi-steps li::before{right:12px;top:13px}.hawi-steps b{font-size:12px}.hawi-steps span,.hawi-steps a{font-size:10px}.hawi-join{font-size:12px;padding:10px 14px}}
