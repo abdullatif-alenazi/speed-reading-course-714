@@ -171,12 +171,14 @@ document.querySelectorAll('audio,video').forEach(media => media.addEventListener
 }));
 
 const calendar = document.querySelector('#calendar-grid');
-for (let i = 0; i < 21; i++) {
-  const date = new Date(Date.UTC(2026, 8, 29 + i));
-  const day = document.createElement('div');
-  day.className = 'day';
-  day.innerHTML = `<small>اليوم ${i + 1}</small><span>${date.getUTCDate()} ${date.getUTCMonth() === 8 ? 'سبتمبر' : 'أكتوبر'}</span>`;
-  calendar.append(day);
+if (calendar) {
+  for (let i = 0; i < 21; i++) {
+    const date = new Date(Date.UTC(2026, 8, 29 + i));
+    const day = document.createElement('div');
+    day.className = 'day';
+    day.innerHTML = `<small>اليوم ${i + 1}</small><span>${date.getUTCDate()} ${date.getUTCMonth() === 8 ? 'سبتمبر' : 'أكتوبر'}</span>`;
+    calendar.append(day);
+  }
 }
 
 const hashIndex = slides.findIndex(slide => `#${slide.id}` === window.location.hash);
