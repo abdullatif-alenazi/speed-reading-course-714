@@ -50,4 +50,28 @@ html,body{width:100%;height:100%;overflow:hidden}
 .sidebar{right:0;left:auto;transform:translateX(105%)}
 .sidebar.open{transform:translateX(0)}
 @media(max-width:760px){.sidebar{right:0;left:auto}}
+
+/* لوحة النادي: قائمة مشرقة بحواف متسقة مع بطاقات المنصة وأزرارها. */
+.sidebar{
+  top:12px;bottom:12px;padding:28px 22px;
+  background:linear-gradient(155deg,#ffffff 0%,#ebfbf8 52%,#e3f1ff 100%);
+  color:var(--ink);border:1px solid rgba(88,173,191,.24);
+  border-radius:28px 0 0 28px;box-shadow:-16px 18px 46px rgba(24,88,126,.20)
+}
+.drawer-heading{color:var(--navy)}
+.menu-close{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#e7f6f7;color:var(--navy);font-size:30px}
+.club-tagline{color:#169e99;font-weight:700;margin:5px 0 18px}
+.club-about{border-color:#cce8ea;padding:15px 0;margin-bottom:15px}
+.club-about>span{color:#178c98}
+.club-about p{color:#476d7f}
+.sidebar nav{gap:8px}
+.sidebar nav a{padding:11px 13px;border:1px solid transparent;border-radius:16px;color:#315b75;background:rgba(255,255,255,.62);transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.sidebar nav a span{color:#4e9fa8;font-weight:700}
+.sidebar nav a.active{color:#fff;background:linear-gradient(135deg,#2f8fc7,#37bdb1);border:0;box-shadow:0 8px 18px rgba(40,150,182,.24)}
+.sidebar nav a.active span{color:#e9fffc}
+.sidebar nav a:hover{background:#fff;color:#207f9f;transform:translateX(-3px);box-shadow:0 6px 14px rgba(38,128,162,.12)}
+.side-bottom{margin-top:auto;padding:16px;border-radius:18px;background:rgba(255,255,255,.66);color:#537084}
+.side-bottom p{color:#537084;margin:9px 0}.side-bottom strong{color:var(--navy)}
+.batch{border:0;border-radius:999px;background:#fff3d8;color:#9c6611;padding:4px 11px}
+@media(max-width:760px){.sidebar{top:8px;bottom:8px;border-radius:22px 0 0 22px;padding:23px 20px}.sidebar nav a{border-radius:14px}}
 @media(max-width:760px){.criteria-image img{height:300px}.hawi-steps{grid-template-columns:1fr;gap:8px;margin:14px 0}.hawi-steps li{min-height:0;padding:13px 44px 13px 12px}.hawi-steps li::before{right:12px;top:13px}.hawi-steps b{font-size:12px}.hawi-steps span,.hawi-steps a{font-size:10px}.hawi-join{font-size:12px;padding:10px 14px}#books{padding-top:14px}#books .books-guide video{height:125px}#books .book-rules{grid-template-columns:128px 1fr;margin-top:7px}#books .page-rule{padding:9px}#books .page-rule strong{font-size:25px}#books .page-rule>div{font-size:8px;line-height:1.4}#books .rule-list{grid-template-columns:1fr;padding:4px 9px;gap:0}#books .rule-list article{padding:3px 0}#books .rule-list h3{font-size:10px}#books .rule-list p{display:none}#books .audio-card{margin-top:7px;padding:9px}#books .audio-card.full-width{display:grid;grid-template-columns:auto 1fr}#books .audio-card.full-width audio{grid-column:1/-1}#books .audio-card.full-width .small-link{display:none}.hawi-title{font-size:15px;margin-top:13px}}
